@@ -9,7 +9,8 @@ import { AppService } from './app.service';
 @Module({
   imports: [ConfigModule.forRoot({ isGlobal: true }), AuthModule, UsersModule, ProductsModule],
   providers: [AppService],
-   controllers: [AppController],
+  controllers: [AppController],
 })
+
 export class AppModule {
 }

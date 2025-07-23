@@ -1,4 +1,4 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, Post, Query } from '@nestjs/common';
 import { ProductsService } from './products.service';
 
 @Controller('products')
@@ -18,4 +18,10 @@ export class ProductsController {
 
     return this.productsService.list(pageNum, limitNum);
   }
+  @Post()
+  async createProduct() {
+    // Implement product creation logic here
+    return { message: 'Product created!' };
+  }
 }
+
