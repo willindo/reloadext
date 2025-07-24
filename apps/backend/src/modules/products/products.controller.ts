@@ -8,7 +8,7 @@ export class ProductsController {
   getRoot(): string {
     return 'Welcome to the API waiting for!';
   }
-  @Get()
+  @Get() 
   async listProducts(
     @Query('page') page: string,
     @Query('limit') limit: string,
@@ -18,7 +18,7 @@ export class ProductsController {
 
     return this.productsService.list(pageNum, limitNum);
   }
-  @Post()
+  @Get('/create')
   async createProduct() {
     // Implement product creation logic here
     return { message: 'Product created!' };

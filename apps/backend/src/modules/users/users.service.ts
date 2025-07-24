@@ -5,7 +5,7 @@ const prisma = new PrismaClient();
 
 @Injectable()
 export class UsersService {
-  async create(data) {
+  async create(data: { email: string; password: string; name: string }) {
     return prisma.user.create({ data });
   }
 
