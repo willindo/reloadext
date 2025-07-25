@@ -1,15 +1,18 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { PrismaService } from '../../prisma.service'; // adjust path if needed
 
 @Injectable()
 export class UsersService {
-  async create(data: { email: string; password: string; name: string }) {
-    return prisma.user.create({ data });
-  }
+  constructor(private readonly prisma: PrismaService) {}
 
-  async findByEmail(email: string) {
-    return prisma.user.findUnique({ where: { email } });
+  async findAll() {
+    return this.prisma.user.findMany({
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        // Add more fields as needed, but do not expose password!
+      },
+    });
   }
 }

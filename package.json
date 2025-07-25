@@ -1,4 +1,7 @@
 {
+  "prisma": {
+    "seed": "ts-node --transpile-only prisma/seed.ts"
+  },
   "scripts": {
     "generate": "prisma generate",
     "push": "prisma db push",

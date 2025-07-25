@@ -3,7 +3,7 @@
 // @ts-check
 module.exports = {
   plugins: {
-    '@tailwindcss/postcss': {},
+    // 'tailwindcss': {},
     autoprefixer: {},
      tailwindcss: {},
   },

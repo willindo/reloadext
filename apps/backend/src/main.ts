@@ -8,7 +8,10 @@ async function bootstrap() {
 
   const port = configService.get('PORT') || 3001;
   const host = configService.get('HOST') || 'localhost';
-
+ app.enableCors({
+    origin: 'http://localhost:3000', // Frontend origin
+    credentials: true,
+  });
   await app.listen(port, host);
   console.log(`🚀 Server is running on http://${host}:${port}`);
 }
