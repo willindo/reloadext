@@ -1,4 +1,22 @@
-version: '3.8'
+# version: '3.8'
+
+# services:
+#   db:
+#     image: postgres:15
+#     container_name: reload-postgres
+#     restart: always
+#     environment:
+#       POSTGRES_USER: postgres
+#       POSTGRES_PASSWORD: postgres
+#       POSTGRES_DB: reload_db
+#     ports:
+#       - "5432:5432"
+#     volumes:
+#       - pg_data:/var/lib/postgresql/data
+
+# volumes:
+#   pg_data:
+version: "3.8"
 
 services:
   db:
@@ -13,6 +31,30 @@ services:
       - "5432:5432"
     volumes:
       - pg_data:/var/lib/postgresql/data
+
+  backend:
+    build:
+      context: .
+      dockerfile: apps/backend/Dockerfile
+    container_name: reload-backend
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@db:5432/reload_db
+    ports:
+      - "3001:3001" # adjust if your backend exposes another port
+
+  frontend:
+    build:
+      context: .
+      dockerfile: apps/frontend/Dockerfile
+    container_name: reload-frontend
+    depends_on:
+      - backend
+    ports:
+      - "3000:3000"
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:3001
 
 volumes:
   pg_data:
