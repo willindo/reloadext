@@ -1,0 +1,11 @@
+version: "3.8"
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: apps/backend/Dockerfile
+    volumes:
+      - ./apps/backend:/app               # Mount local source code
+      - ./prisma:/app/prisma              # Mount local prisma
+      - /app/node_modules                 # Prevent node_modules override
+    command: npm run start:dev
