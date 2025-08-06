@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { login } from '../../lib/auth';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 export default function LoginPage() {
   const [form, setForm] = useState({ email: '', password: '' });
@@ -40,6 +41,7 @@ export default function LoginPage() {
         />
         <button type="submit">Login</button>
       </form>
+      <Link href="/">Home</Link>
     </div>
   );
 }

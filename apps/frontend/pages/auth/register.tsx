@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { register } from '../../lib/auth';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 export default function RegisterPage() {
   const [form, setForm] = useState({ name: '', email: '', password: '' });
@@ -38,6 +39,7 @@ export default function RegisterPage() {
         />
         <button type="submit">Register</button>
       </form>
+      <Link href={'/'}>Home</Link>
     </div>
   );
 }

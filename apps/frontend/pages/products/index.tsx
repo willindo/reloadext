@@ -6,6 +6,7 @@ import { api } from "../../lib/api";
 import ProductForm from "../../components/products/ProductForm";
 import ProductList from "../../components/products/ProductList";
 import { Product, User } from "../../types";
+import Link from "next/link";
 
 export default function ProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -62,7 +63,10 @@ export default function ProductsPage() {
 
   return (
     <div style={{ padding: "2rem" }}>
-      <h1>📦 Product List</h1>
+      <h1>📦 Product List</h1> 
+      <Link href="/" className="text-red-900 underline">
+        Home
+      </Link>
 
       <ProductForm onCreated={fetchProducts} />
 
