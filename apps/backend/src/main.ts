@@ -7,7 +7,7 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
 
   const port = configService.get('PORT') || 3001;
-  const host = configService.get('HOST') || 'localhost';
+  const host = configService.get('BACKEND_HOST') || '0.0.0.0';
  app.enableCors({
     origin: 'http://localhost:3000', // Frontend origin
     credentials: true,

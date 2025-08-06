@@ -1,0 +1,40 @@
+FROM node:20-alpine
+
+# Add curl for network diagnostics
+RUN apk add --no-cache curl
+
+# Set working directory
+WORKDIR /app
+RUN echo "✅ Working directory set to /app"
+
+# Copy backend package files and install dependencies
+COPY apps/backend/package*.json ./
+RUN echo "📦 Package files copied"
+RUN npm install --verbose
+RUN echo "✅ npm install completed"
+
+# Copy backend source code
+COPY apps/backend ./
+RUN echo "📁 Backend source code copied"
+
+# Copy shared Prisma directory from root into /app/prisma
+COPY prisma ./prisma
+RUN echo "📁 Prisma directory copied"
+
+# Copy environment variables
+COPY .env .env
+RUN echo "🔐 .env file copied"
+
+# Generate Prisma client and run migrations
+RUN npx prisma generate
+RUN echo "✅ Prisma client generated"
+RUN npx prisma migrate deploy
+RUN echo "✅ Prisma migrations deployed"
+
+# Build the NestJS app
+RUN npm run build
+RUN echo "✅ NestJS app built"
+
+# Set environment and run the app
+ENV NODE_ENV=production
+CMD ["node", "dist/main"]

@@ -16,7 +16,7 @@
 
 # volumes:
 #   pg_data:
-version: "3.8"
+# version: "3.8"
 
 services:
   db:
@@ -39,10 +39,12 @@ services:
     container_name: reload-backend
     depends_on:
       - db
-    environment:
-      DATABASE_URL: postgres://postgres:postgres@db:5432/reload_db
+    env_file:
+      - .env.docker   # <--- Mounts .env from root
     ports:
-      - "3001:3001" # adjust if your backend exposes another port
+    - "3001:3001"
+    # networks:
+    #   - backend
 
   frontend:
     build:
@@ -58,3 +60,7 @@ services:
 
 volumes:
   pg_data:
+
+# networks:
+#   backend:
+

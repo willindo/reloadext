@@ -1,5 +1,24 @@
+# General monorepo exclusions
 node_modules
-npm-debug.log
 .env
 dist
 .next
+npm-debug.log
+
+# Ignore frontend app (not part of Docker build)
+apps/frontend
+
+# Optional: editor/config clutter
+.vscode
+.idea
+.DS_Store
+coverage
+
+# Optional: scripts or extra files not needed in image
+README.md
+LICENSE
+*.sh
+
+# Docker/meta files not required inside image
+docker-compose.yml
+Dockerfile

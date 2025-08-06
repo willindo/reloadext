@@ -3,18 +3,22 @@
     "seed": "ts-node --transpile-only prisma/seed.ts"
   },
   "scripts": {
+    "switch:local": "./switch-env.sh local",
+    "switch:docker": "./switch-env.sh docker",
+    "switch:prod": "./switch-env.sh production",
+    "dev": "npm run switch:local && npm run generate && npm run seed && cd apps/backend && npm run start:dev",
+    "docker": "npm run switch:docker && docker-compose up --build",
     "generate": "prisma generate",
-    "push": "prisma db push",
-    "migrate": "prisma migrate dev",
-    "seed": "ts-node --transpile-only prisma/seed.ts"
+    "seed": "ts-node prisma/seed.ts",
+    "postinstall": "npx prisma generate"
   },
   "devDependencies": {
     "@types/node": "^24.1.0",
-    "prisma": "^6.12.0",
+    "prisma": "^6.13.0",
     "ts-node": "^10.9.2"
   },
   "dependencies": {
-    "@prisma/client": "^6.12.0",
+    "@prisma/client": "^6.13.0",
     "typescript": "^5.8.3"
   }
 }

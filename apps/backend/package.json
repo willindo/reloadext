@@ -6,7 +6,7 @@
   "private": true,
   "license": "UNLICENSED",
   "prisma": {
-    "schema": "../../prisma/schema.prisma"
+    "schema": "prisma/schema.prisma"
   },
   "scripts": {
     "build": "nest build",
@@ -84,7 +84,8 @@
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
   },
-  "main": "index.js",
+  "main": "dist/main.js",
+
   "directories": {
     "test": "test"
   },
