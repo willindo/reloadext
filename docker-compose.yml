@@ -31,7 +31,13 @@ services:
       - "5432:5432"
     volumes:
       - pg_data:/var/lib/postgresql/data
-
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@reload.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
   backend:
     build:
       context: .
@@ -42,21 +48,21 @@ services:
       - .env.docker
 
 
-  frontend:
-    build:
-      context: .
-      dockerfile: apps/frontend/Dockerfile
-    container_name: reload-frontend
-    depends_on:
-      - backend
-    ports:
-      - "3000:3000"
-    environment:
-      NEXT_PUBLIC_API_URL: http://localhost:3001
 
 volumes:
   pg_data:
 
 # networks:
 #   backend:
+  # frontend:
+  #   build:
+  #     context: .
+  #     dockerfile: apps/frontend/Dockerfile
+  #   container_name: reload-frontend
+  #   depends_on:
+  #     - backend
+  #   ports:
+  #     - "3000:3000"
+  #   environment:
+  #     NEXT_PUBLIC_API_URL: http://localhost:3001
 

@@ -3,7 +3,9 @@ export type Product = {
   name: string;
   description?: string;
   price: number;
+  userId: string; // add this
 };
+
 export type User = {
   id: string;
   name: string;

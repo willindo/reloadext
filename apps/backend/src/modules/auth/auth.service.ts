@@ -1,7 +1,7 @@
+// apps/backend/src/modules/auth/auth.service.ts
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-// Update the import path if necessary to match the actual location of prisma.service.ts
 import { PrismaService } from '../../prisma.service';
 
 @Injectable()
@@ -23,6 +23,7 @@ export class AuthService {
     return { message: 'User registered successfully', userId: user.id };
   }
 
+  // UPDATED: return access_token and user object
   async login(email: string, password: string) {
     const user = await this.prisma.user.findUnique({ where: { email } });
     if (!user) throw new UnauthorizedException('Invalid credentials');
@@ -32,6 +33,14 @@ export class AuthService {
 
     const payload = { sub: user.id, email: user.email };
     const token = this.jwtService.sign(payload);
-    return { access_token: token };
+
+    return {
+      access_token: token,
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+      },
+    };
   }
 }

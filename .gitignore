@@ -2,3 +2,10 @@ node_modules
 dist
 .env
 *.log
+#  find /mnt/c/Users/loki/reload-ops/apps/frontend/pages -type f -exec head   {} \;
+# find /mnt/c/Users/loki/reload-ops/apps/frontend/pages -type f -exec head -n 10 {} \;
+# cat /mnt/c/Users/loki/reload-ops/apps/frontend/**/*.{*.ts,package.json,*.tsx,} 2>/dev/null
+# cat /mnt/c/Users/loki/reload-ops/apps/frontend/**/* 2>/dev/null
+# find /mnt/c/Users/loki/reload-ops/apps/frontend -type f \( -name "*.ts" -o -name "*.tsx" -o -name "package.json" \) -exec cat {} \;
+# find /mnt/c/Users/loki/reload-ops/apps/frontend/{components,lib,pages} -type f \( -name "*.ts" -o -name "*.tsx" -o -name "package.json" \) -exec cat {} \;
+# find /mnt/c/Users/loki/reload-ops/apps/backend/{src,hallo} -type f \( -name "*.ts" -o -name "*.tsx" -o -name "package.json" \) -exec cat {} \;

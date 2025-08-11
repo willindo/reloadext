@@ -1,35 +1,34 @@
-import { Body, Controller, Get, Post, Query,Param,Delete, Put } from '@nestjs/common';
+// apps/backend/src/modules/products/products.controller.ts
+import { Body, Controller, Get, Post, Query, Req, UseGuards } from '@nestjs/common';
 import { ProductsService } from './products.service';
+import { AuthGuard } from '@nestjs/passport';
+import { CreateProductDto } from './dto/create-product.dto';
 
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
+  // Protected creation - use user id from JWT (req.user.id)
+  @UseGuards(AuthGuard('jwt'))
+  @Post()
+  async create(@Body() dto: CreateProductDto, @Req() req) {
+    const userId = req.user?.id;
+    // explicitly build object sent to service/prisma
+    return this.productsService.create({
+      name: dto.name,
+      description: dto.description,
+      price: dto.price,
+      userId,
+    });
+  }
+
+  // Public listing; optional userId query param to filter by owner
   @Get()
   async findAll(
     @Query('page') page = '1',
     @Query('limit') limit = '10',
-    @Query('userId') userId?: string
+    @Query('userId') userId?: string,
   ) {
-    return this.productsService.findAll({
-      page: parseInt(page),
-      limit: parseInt(limit),
-      userId,
-    });
+    return this.productsService.findAll(+page, +limit, { page: +page, limit: +limit, userId });
   }
- 
-@Post()
-async createProduct(@Body() body: any) {
-  return this.productsService.create(body);
 }
-@Delete(':id')
-async deleteProduct(@Param('id') id: string) {
-  return this.productsService.delete(id);
-}
-@Put(':id')
-async updateProduct(@Param('id') id: string, @Body() data: any) {
-  return this.productsService.update(id, data);
-}
-
-}
- 

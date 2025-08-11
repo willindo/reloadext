@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaClient } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma.service';
+import { CreateProductDto } from './dto/create-product.dto';
 
 // const prisma = new PrismaClient(); not needed as we use PrismaService
 
@@ -8,7 +9,7 @@ import { PrismaService } from 'src/prisma.service';
 export class ProductsService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async findAll(params: { page: number; limit: number; userId?: string }) {
+  async findAll(p0: number, p1: number, params: { page: number; limit: number; userId?: string; }) {
     const { page, limit, userId } = params;
 
     console.log('📦 Fetching products with:', { page, limit, userId });
@@ -31,19 +32,14 @@ export class ProductsService {
     console.log('✅ Products found:', products.length);
     return products;
   }
-  async create(data: { name: string; description?: string; price: number }) {
+  async create(data: Prisma.ProductUncheckedCreateInput) {
     // In real world, you'd get userId from auth
     const demoUser = await this.prisma.user.findFirst({
       where: { email: 'demo@example.com' },
     });
     if (!demoUser) throw new Error('Demo user not found');
-
-    return this.prisma.product.create({
-      data: {
-        ...data,
-        userId: demoUser.id,
-      },
-    });
+``
+    return this.prisma.product.create({data });
   }
   async delete(id: string) {
     return this.prisma.product.delete({

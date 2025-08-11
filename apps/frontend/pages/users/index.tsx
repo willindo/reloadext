@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { api } from "../../lib/api"; // This should have baseURL: 'http://localhost:3001'
 import { User } from "../../types";  // Make sure you have id, name, email in the type
+import Link from "next/dist/client/link";
 
 export default function UsersPage() {
   const [users, setUsers] = useState<User[]>([]);
@@ -25,6 +26,7 @@ export default function UsersPage() {
 
   return (
     <div style={{ padding: "2rem" }}>
+      <Link href="/">Back to Home</Link>
       <h1>👥 Users</h1>
 
       {loading ? (

@@ -10,6 +10,7 @@ export default function Home() {
         <Link href="auth/login" className="text-blue-500 underline">Login</Link>
         <Link href="auth/register" className="text-blue-500 underline">Register</Link>
         <Link href="/products" className="text-blue-500 underline">View Products</Link>
+        <Link href="/users" className="text-blue-500 underline">View Users</Link>
       </div>
     </main>
   );

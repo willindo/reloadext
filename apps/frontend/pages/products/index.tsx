@@ -1,4 +1,4 @@
-// File: apps/frontend/pages/products/index.tsx
+// apps/frontend/pages/products/index.tsx
 "use client";
 
 import { useEffect, useState } from "react";
@@ -7,6 +7,7 @@ import ProductForm from "../../components/products/ProductForm";
 import ProductList from "../../components/products/ProductList";
 import { Product, User } from "../../types";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 
 export default function ProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -14,10 +15,18 @@ export default function ProductsPage() {
   const [userId, setUserId] = useState("");
   const [page, setPage] = useState(1);
   const [limit] = useState(10);
+  const { data: session } = useSession();
 
   useEffect(() => {
     fetchUsers();
   }, []);
+
+  useEffect(() => {
+    // if logged in, set userId to session user id for "My Products" view toggle
+    if (session?.user?.id && userId === 'me') {
+      setUserId(session.user.id);
+    }
+  }, [session]);
 
   useEffect(() => {
     fetchProducts();
@@ -45,6 +54,7 @@ export default function ProductsPage() {
 
   async function handleDelete(id: string) {
     try {
+      // will require bearer token for protected delete endpoint if you protect it later
       await api.delete(`/products/${id}`);
       fetchProducts();
     } catch (error) {
@@ -63,17 +73,18 @@ export default function ProductsPage() {
 
   return (
     <div style={{ padding: "2rem" }}>
-      <h1>📦 Product List</h1> 
-      <Link href="/" className="text-red-900 underline">
-        Home
-      </Link>
+      <h1>📦 Product List</h1>
+      <Link href="/">Home</Link>
 
-      <ProductForm onCreated={fetchProducts} />
+      <ProductForm onProductAdded={() => fetchProducts()} />
 
       <div style={{ marginBottom: "1rem" }}>
         <label>Select User: </label>
         <select value={userId} onChange={(e) => setUserId(e.target.value)}>
           <option value="">-- All Users --</option>
+          {session?.user?.id && (
+            <option value="me">{session.user.name || "My Products"}</option>
+          )}
           {users.map((user) => (
             <option key={user.id} value={user.id}>
               {user.name}
@@ -82,17 +93,10 @@ export default function ProductsPage() {
         </select>
       </div>
 
-      <ProductList
-        products={products}
-        onDelete={handleDelete}
-        onUpdate={handleUpdate}
-      />
+      <ProductList products={products} onDelete={handleDelete} onUpdate={handleUpdate} />
 
       <div style={{ display: "flex", gap: "1rem" }}>
-        <button
-          onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
-          disabled={page === 1}
-        >
+        <button onClick={() => setPage((prev) => Math.max(prev - 1, 1))} disabled={page === 1}>
           ⬅️ Prev
         </button>
         <span>Page: {page}</span>
