@@ -7,8 +7,6 @@
     "switch:local": "./switch-env.sh local",
     "switch:docker": "./switch-env.sh docker",
     "switch:prod": "./switch-env.sh production",
-    "dev": "npm run switch:local && npm run generate && npm run seed && cd apps/backend && npm run start:dev",
-    "docker": "npm run switch:docker && docker-compose up --build",
     "generate": "prisma generate",
     "seed": "ts-node prisma/seed.ts",
     "migrate": "npx prisma migrate dev --name init",
