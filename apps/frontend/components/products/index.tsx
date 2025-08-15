@@ -1,10 +1,11 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { api } from '../../lib/api';
+import  api  from '../../lib/api';
 import ProductForm from '../../components/products/ProductForm';
 import ProductList from '../../components/products/ProductList';
 import { Product } from '../../types';
+// import users from '../../pages/users';
 
 export default function ProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -27,7 +28,7 @@ export default function ProductsPage() {
   return (
     <div style={{ padding: '2rem' }}>
       <h1>📦 Product List</h1>
-      <ProductForm onCreated={fetchProducts} />
+      <ProductForm  onProductAdded={() => fetchProducts()} users={[]} />
       <ProductList products={products} onDelete={function (id: string): void {
         throw new Error('Function not implemented.');
       } } onUpdate={function (id: string, data: Partial<Product>): void {

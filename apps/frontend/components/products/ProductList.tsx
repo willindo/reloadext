@@ -1,17 +1,24 @@
-import { Product } from '../../types';
-import ProductItem from './ProductItem';
+import { Product } from "../../types";
 
-interface Props {
+export default function ProductList({
+  products,
+  onDelete,
+}: {
   products: Product[];
   onDelete: (id: string) => void;
-   onUpdate: (id: string, data: Partial<Product>) => void;
-}
-
-export default function ProductList({ products, onDelete, onUpdate }: Props) {
+}) {
   return (
-    <ul style={{ listStyle: 'none', padding: 0 }}>
+    <ul>
       {products.map((product) => (
-        <ProductItem key={product.id} product={product} onDelete={onDelete} onUpdate={onUpdate} />
+        <li key={product.id} style={{ marginBottom: "10px" }}>
+          <strong>{product.name}</strong> — ${product.price ?? 0}
+          <br />
+          {product.description}
+          <br />
+          <button onClick={() => onDelete(product.id)} style={{ color: "red" }}>
+            🗑️ Delete
+          </button>
+        </li>
       ))}
     </ul>
   );

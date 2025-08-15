@@ -11,12 +11,12 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async register(data: { email: string; name: string; password: string }) {
-    const hashedPassword = await bcrypt.hash(data.password, 10);
+  async register(dto: { email: string; name: string; password: string }) {
+    const hashedPassword = await bcrypt.hash(dto.password, 10);
     const user = await this.prisma.user.create({
       data: {
-        email: data.email,
-        name: data.name,
+        email: dto.email,
+        name: dto.name,
         password: hashedPassword,
       },
     });

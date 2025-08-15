@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { api } from "../../lib/api"; // This should have baseURL: 'http://localhost:3001'
+import  api  from "../../lib/api"; // This should have baseURL: 'http://localhost:3001'
 import { User } from "../../types";  // Make sure you have id, name, email in the type
 import Link from "next/dist/client/link";
 

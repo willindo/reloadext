@@ -26,7 +26,8 @@ export default function LoginPage() {
       setError(res.error);
     } else {
       // signed in
-      router.push("/products");
+      console.log("you are logged in ")
+      router.push("/my-products");
     }
   };
 

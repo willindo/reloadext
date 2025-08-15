@@ -1,47 +1,58 @@
-// apps/frontend/components/products/ProductForm.tsx
-"use client";
-
 import { useState } from "react";
-import { api } from "../../lib/api";
 import { useSession } from "next-auth/react";
+import api from "../../lib/api";
 import { Product } from "../../types";
 
-export default function ProductForm({ onProductAdded }: { onProductAdded: (p: Product) => void }) {
+interface ProductFormProps {
+  onProductAdded: (product: Product) => void;
+}
+
+export default function ProductForm({ onProductAdded }: ProductFormProps) {
   const { data: session } = useSession();
-  const [form, setForm] = useState({ name: "", description: "", price: 0 });
+  const [form, setForm] = useState({
+    name: "",
+    description: "",
+    price: 0
+  });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    try {
+      const headers = session?.accessToken
+        ? { Authorization: `Bearer ${session.accessToken}` }
+        : {};
 
-    if (!session?.user?.id) {
-      alert("You must be logged in to add a product");
-      return;
+      // No need to send userId — backend will set from req.user.id
+      const { data } = await api.post<Product>("/products", form, { headers });
+      onProductAdded(data);
+
+      setForm({ name: "", description: "", price: 0 });
+    } catch (err) {
+      console.error("Error adding product", err);
     }
-
-    const payload = {
-      name: form.name,
-      description: form.description,
-      price: Number(form.price),
-    };
-
-    const headers = session?.accessToken ? { Authorization: `Bearer ${session.accessToken}` } : {};
-
-    const { data } = await api.post<Product>("/products", payload, { headers });
-
-    onProductAdded(data);
-    setForm({ name: "", description: "", price: 0 });
-  };
+  }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-2">
-      <input type="text" name="name" placeholder="Product name" value={form.name} onChange={handleChange} required />
-      <textarea name="description" placeholder="Description" value={form.description} onChange={handleChange} />
-      <input type="number" name="price" placeholder="Price" value={String(form.price)} onChange={handleChange} required />
-      <button type="submit" className="bg-blue-500 text-white px-4 py-2">Add Product</button>
+    <form onSubmit={handleSubmit}>
+      <input
+        placeholder="Name"
+        value={form.name}
+        onChange={(e) => setForm({ ...form, name: e.target.value })}
+      />
+      <input
+        placeholder="Description"
+        value={form.description}
+        onChange={(e) => setForm({ ...form, description: e.target.value })}
+      />
+      <input
+        type="number"
+        placeholder="Price"
+        value={form.price}
+        onChange={(e) =>
+          setForm({ ...form, price: parseFloat(e.target.value) })
+        }
+      />
+      <button type="submit">Add Product</button>
     </form>
   );
 }

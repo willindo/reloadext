@@ -2,12 +2,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { api } from "../../lib/api";
-import ProductForm from "../../components/products/ProductForm";
-import ProductList from "../../components/products/ProductList";
-import { Product, User } from "../../types";
-import Link from "next/link";
 import { useSession } from "next-auth/react";
+import  api  from "../../lib/api";
+import { Product, User } from "../../types";
+import ProductList from "../../components/products/ProductList";
+import Link from "next/link";
 
 export default function ProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -21,16 +20,15 @@ export default function ProductsPage() {
     fetchUsers();
   }, []);
 
-  useEffect(() => {
-    // if logged in, set userId to session user id for "My Products" view toggle
-    if (session?.user?.id && userId === 'me') {
-      setUserId(session.user.id);
-    }
-  }, [session]);
+useEffect(() => {
+  if (userId === "me" && session?.user?.id) {
+    fetchProducts(session.user.id);
+  } else {
+    fetchProducts(userId || undefined);
+  }
+}, [page, userId, session]);
 
-  useEffect(() => {
-    fetchProducts();
-  }, [page, userId]);
+
 
   async function fetchUsers() {
     try {
@@ -41,42 +39,47 @@ export default function ProductsPage() {
     }
   }
 
-  async function fetchProducts() {
-    try {
-      const res = await api.get("/products", {
-        params: { page, limit, userId: userId || undefined },
-      });
-      setProducts(res.data);
-    } catch (error) {
-      console.error("Error fetching products:", error);
-    }
+  async function fetchProducts(filterUserId?: string) {
+  try {
+    const res = await api.get("/products", {
+      params: { page, limit, userId: filterUserId },
+    });
+    setProducts(res.data);
+  } catch (error) {
+    console.error("Error fetching products:", error);
   }
+}
 
-  async function handleDelete(id: string) {
-    try {
-      // will require bearer token for protected delete endpoint if you protect it later
-      await api.delete(`/products/${id}`);
-      fetchProducts();
-    } catch (error) {
-      console.error("Error deleting product:", error);
-    }
+async function handleDelete(id: string) {
+  try {
+    await api.delete(`/products/${id}`, {
+      headers: { Authorization: `Bearer ${session?.accessToken}` }
+    });
+    fetchProducts(userId === "me" ? session?.user?.id : userId);
+  } catch (error) {
+    console.error("Error deleting product:", error);
   }
+}
 
-  async function handleUpdate(id: string, data: Partial<Product>) {
-    try {
-      await api.put(`/products/${id}`, data);
-      fetchProducts();
-    } catch (error) {
-      console.error("Error updating product:", error);
-    }
+async function handleUpdate(id: string, data: Partial<Product>) {
+  // const name = prompt("Enter new product name:");
+  // if (!name) return;
+  try {
+    await api.patch(`/products/${id}`, data, {
+      headers: { Authorization: `Bearer ${session?.accessToken}` }
+    });
+    fetchProducts(userId === "me" ? session?.user?.id : userId);
+  } catch (error) {
+    console.error("Error updating product:", error);
   }
+}
 
   return (
     <div style={{ padding: "2rem" }}>
       <h1>📦 Product List</h1>
       <Link href="/">Home</Link>
 
-      <ProductForm onProductAdded={() => fetchProducts()} />
+      {/* <ProductForm onProductAdded={() => fetchProducts()} /> */}
 
       <div style={{ marginBottom: "1rem" }}>
         <label>Select User: </label>
