@@ -57,3 +57,5 @@ wait
 # foreach ($file in $files) {
 #     New-Item -ItemType File -Path (Join-Path $targetPath $file) -Force
 # }
+#  mkdir -p apps/backend/prisma
+# cp prisma/schema.prisma apps/backend/prisma/schema.prisma

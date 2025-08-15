@@ -1,6 +1,7 @@
 {
   "prisma": {
-    "seed": "ts-node --transpile-only prisma/seed.ts"
+    "schema": "apps/backend/prisma/schema.prisma",
+    "seed": "ts-node --transpile-only apps/backend/prisma/seed.ts"
   },
   "scripts": {
     "switch:local": "./switch-env.sh local",
