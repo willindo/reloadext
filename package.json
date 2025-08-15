@@ -1,25 +1,14 @@
 {
-  "prisma": {
-    "schema": "apps/backend/prisma/schema.prisma",
-    "seed": "ts-node --transpile-only apps/backend/prisma/seed.ts"
-  },
   "scripts": {
     "switch:local": "./switch-env.sh local",
     "switch:docker": "./switch-env.sh docker",
-    "switch:prod": "./switch-env.sh production",
-    "generate": "prisma generate",
-    "seed": "ts-node prisma/seed.ts",
-    "migrate": "npx prisma migrate dev --name init",
-    "postinstall": "npx prisma generate"
+    "switch:prod": "./switch-env.sh production"
   },
   "devDependencies": {
     "@types/next-auth": "^3.13.0",
-    "@types/node": "^24.1.0",
-    "prisma": "^6.14.0",
-    "ts-node": "^10.9.2"
+    "@types/node": "^24.1.0"
   },
   "dependencies": {
-    "@prisma/client": "^6.14.0",
     "next-auth": "^4.24.11",
     "typescript": "^5.8.3"
   }
