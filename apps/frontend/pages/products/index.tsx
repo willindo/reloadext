@@ -49,13 +49,13 @@ useEffect(() => {
     console.error("Error fetching products:", error);
   }
 }
-
+// fetchProducts(userId === "me" ? session?.user?.id : userId);
 async function handleDelete(id: string) {
   try {
     await api.delete(`/products/${id}`, {
       headers: { Authorization: `Bearer ${session?.accessToken}` }
     });
-    fetchProducts(userId === "me" ? session?.user?.id : userId);
+    
   } catch (error) {
     console.error("Error deleting product:", error);
   }
@@ -96,7 +96,7 @@ async function handleUpdate(id: string, data: Partial<Product>) {
         </select>
       </div>
 
-      <ProductList products={products} onDelete={handleDelete} onUpdate={handleUpdate} />
+      <ProductList products={products} editable={false} onDelete={handleDelete} onUpdate={handleUpdate} />
 
       <div style={{ display: "flex", gap: "1rem" }}>
         <button onClick={() => setPage((prev) => Math.max(prev - 1, 1))} disabled={page === 1}>

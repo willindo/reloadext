@@ -26,6 +26,18 @@ export default function MyProductsPage() {
       setLoading(false);
     }
   };
+async function handleUpdate(id: string, data: Partial<Product>) {
+  // const name = prompt("Enter new product name:");
+  // if (!name) return;
+  try {
+    await api.patch(`/products/${id}`, data, {
+      headers: { Authorization: `Bearer ${session?.accessToken}` }
+    });
+    fetchMyProducts();
+  } catch (error) {
+    console.error("Error updating product:", error);
+  }
+}
 
   // Delete product
   const handleDelete = async (id: string) => {
@@ -70,7 +82,7 @@ export default function MyProductsPage() {
 
       <h2>Your Products</h2>
       {products.length > 0 ? (
-        <ProductList products={products} onDelete={handleDelete} />
+        <ProductList products={products} editable={true} onDelete={handleDelete} onUpdate={handleUpdate} />
       ) : (
         <p>No products yet. Add your first one!</p>
       )}
