@@ -28,7 +28,7 @@ export default function ProductsPage() {
   return (
     <div style={{ padding: '2rem' }}>
       <h1>📦 Product List</h1>
-      <ProductForm  onProductAdded={() => fetchProducts()} users={[]} />
+      <ProductForm  onProductAdded={() => fetchProducts()} />
       <ProductList products={products} onDelete={function (id: string): void {
         throw new Error('Function not implemented.');
       } } onUpdate={function (id: string, data: Partial<Product>): void {
