@@ -10,7 +10,7 @@ COPY apps/backend/package*.json ./
 RUN npm install  # or: npm install --omit=dev
 
 # Copy source code
-COPY apps/backend ./
+COPY apps/backend ./backend
 COPY prisma ./prisma  # keep prisma path inside /app/prisma
 
 ENV NODE_ENV=production
