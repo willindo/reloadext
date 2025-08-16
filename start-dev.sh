@@ -59,3 +59,64 @@ wait
 # }
 #  mkdir -p apps/backend/prisma
 # cp prisma/schema.prisma apps/backend/prisma/schema.prisma
+on vercel :
+NEXT_PUBLIC_API_URL=https://reload-ops-production.up.railway.app
+NEXTAUTH_URL=https://reload-ops.vercel.app
+NEXTAUTH_SECRET=supersecretkey
+on railway
+FRONTEND_URL=https://reload-ops.vercel.app
+DATABASE_URL=postgresql://postgres:tAHUmyfaoIuzbGCjiPYPPROaLEgfcjeA@postgres.railway.internal:5432/railway
+JWT_SECRET=supersecretkey
+NODE_ENV=production
+/backend =>
+--- datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}---
+app.enableCors({
+  origin: [ process.env.FRONTEND_URL ,'http://localhost:3000'],
+  credentials: true,
+});
+
+  await app.listen(port,'0.0.0.0');
+  console.log(`🚀 Server is running on http://0.0.0.0:${port}`);
+}---
+  super({
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      secretOrKey: process.env.JWT_SECRET || 'supersecretkey',
+    });
+  }---
+   JwtModule.register({
+      secret: process.env.JWT_SECRET || 'supersecretkey',
+      signOptions: { expiresIn: '1d' },
+    }),---
+/frontend =>
+  const res = await fetch("https://reload-ops-production.up.railway.app/auth/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },---
+   const api = axios.create({
+  // baseURL: "http://localhost:3001",
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
+});         
+ verify all above, remove or add on vercel or railway? these all about env variables setup . 
+i provide here railway.json = {
+  "$schema": "https://railway.com/railway.schema.json",
+  "build": {
+      "dockerfilePath": null,
+    "nixpacksPlan": {
+      "providers": ["node"],
+      "phases": {
+        "install": {
+          "cmds": ["npm install --legacy-peer-deps"]
+        },
+        "build": {
+          "cmds": ["npm run build"]
+        }
+      },
+      "startCommand": "npm run start:prod"
+    }
+  },
+  "deploy": {
+    "preDeployCommand": ["npx prisma migrate deploy"]
+  }
+}

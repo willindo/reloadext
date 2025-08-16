@@ -10,7 +10,7 @@ async function bootstrap() {
   const host = configService.get('HOST') || 'localhost';
 
 app.enableCors({
-  origin: ['https://reload-ops.vercel.app', 'http://localhost:3000'],
+  origin: [ process.env.FRONTEND_URL ,'http://localhost:3000'],
   credentials: true,
 });
 
