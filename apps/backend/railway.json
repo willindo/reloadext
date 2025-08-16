@@ -16,6 +16,6 @@
     }
   },
   "deploy": {
-    "preDeployCommand": ["npm run db:migrate"]
+    "preDeployCommand": ["npx prisma migrate deploy"]
   }
 }
