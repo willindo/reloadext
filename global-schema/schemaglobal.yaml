@@ -1,0 +1,105 @@
+User:
+  id: string (UUID)
+  email: string (unique)
+  name: string | null
+  phone: string | null
+  roles: string[] # e.g. ["BUYER","SELLER"]
+  isEmailVerified: bool
+  createdAt: datetime
+  updatedAt: datetime
+
+SellerProfile:
+  id: string (UUID)
+  userId: string (ref to User.id)
+  shopName: string
+  slug: string | null
+  metadata: object | null
+  createdAt, updatedAt
+
+  Product:
+  id: string (UUID)
+  sellerId: string (User.id)
+  title: string
+  slug: string
+  description: string | null
+  price: decimal           # canonical display price e.g. 499.99
+  priceMinor: integer      # 49999 (paise)
+  currency: string         # "INR"
+  sku: string | null
+  stock: integer           # available qty
+  isActive: boolean
+  images: string[]         # urls
+  categories: string[]     # category ids or names
+  createdAt, updatedAt
+
+
+Address:
+  id: string (UUID)
+  userId: string
+  name: string
+  line1, line2, city, state, postalCode, country, phone
+  isDefault: boolean
+  createdAt, updatedAt
+
+
+Cart:
+  id: string (UUID)
+  userId: string
+  items: CartItem[]
+
+CartItem:
+  productId: string
+  quantity: integer
+  unitPrice: decimal
+  unitPriceMinor: integer
+  currency: string
+  addedAt: datetime
+
+Order:
+  id: string (UUID)
+  orderNumber: string  # human friendly, unique
+  projectId: string | null
+  buyerId: string
+  status: enum [PENDING, PAID, PROCESSING, SHIPPED, DELIVERED, CANCELLED, REFUNDED]
+  totalAmount: decimal
+  totalAmountMinor: integer
+  currency: string
+  items: OrderItem[]
+  shippingAddressSnapshot: object  # full address snapshot
+  metadata: object | null
+  idempotencyKey: string | null
+  createdAt, updatedAt
+
+OrderItem:
+  id: string (UUID)
+  orderId: string
+  productId: string
+  title: string             # snapshot
+  sku: string | null
+  unitPrice: decimal
+  unitPriceMinor: integer
+  quantity: integer
+  totalPrice: decimal
+  totalPriceMinor: integer
+
+Payment:
+  id: string (UUID)                 # our internal payment id
+  projectId: string | null
+  payerId: string (User.id)
+  provider: string                  # "razorpay", "mock", etc.
+  providerOrderId: string | null    # provider order (if used)
+  providerPaymentId: string | null  # provider payment id
+  amount: decimal
+  amountMinor: integer
+  currency: string
+  status: enum [PENDING, SUCCESS, FAILED, REFUNDED]
+  metadata: object | null
+  idempotencyKey: string | null
+  createdAt, updatedAt
+
+PaymentEvent:
+  id: string (UUID)
+  paymentId: string
+  type: string   # e.g. "payment.initiated","payment.captured","refund.initiated"
+  payload: object
+  receivedAt: datetime
