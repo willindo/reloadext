@@ -43,21 +43,35 @@ docker compose restart payment
 docker compose up -d payment-db payment-pgadmin
 
 
-// find ~/dev/payment -type f -name "*.module.ts" \
-//   -not -path "*/node_modules/*" \
-//   -not -path "*/dist/*" \
-//   -not -path "*/.next/*" \
-//   -exec sh -c 'echo "==== {} ===="; cat "{}"; echo' \;
+ find ~/dev/payment -type f -name "*.module.ts" \
+   -not -path "*/node_modules/*" \
+   -not -path "*/dist/*" \
+   -not -path "*/.next/*" \
+   -exec sh -c 'echo "==== {} ===="; cat "{}"; echo' \;
 
 // tree -I 'node_modules|dist|.next|*.tsbuildinfo|*.log' -a ~/dev/payment/apps/api
 
 find ~/dev/payment -type f \( -name "*.controller.ts" -o -name "*.service.ts" -o -name "*.module.ts" \) \
   -exec sh -c 'echo "==== {} ===="; cat "{}"; echo' \;
+
 find ~/dev/payment/apps/api/prisma \
   -exec sh -c 'echo "==== {} ===="; cat "{}"; echo' \;
 
+find ~/dev/reload-ops/apps/frontend \
+  -not -path "*/node_modules/*" \
+  -not -path "*/dist/*" \
+  -not -path "*/.next/*" \
+  -not -path "*/styles/*" \
+  -not -name "package.*" \
+  -not -name "*.json" \
+  -exec sh -c 'echo "==== {} ===="; cat "{}"; echo' \;
 
-find ~/dev/payment -type f \( -name "app.module.ts" -o -name "payments.module.ts" \) \
+
+find ~/dev/reload-ops/apps/frontend  \
+  -not -path "*/node_modules/*" \
+   -not -path "*/dist/*" \
+   -not -path "*/.next/*" \
+   -not -path "*/styles/* \
   -exec sh -c 'echo "==== {} ===="; cat "{}"; echo' \;
 
 docker compose exec payment-api npx prisma migrate deploy
